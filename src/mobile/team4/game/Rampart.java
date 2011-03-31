@@ -12,7 +12,7 @@ public class Rampart extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         GameMap map = new GameMap(10, 10);
-        map.placeWall(new WallPiece(WallPiece.Shape.Line), new Point(5, 5));
+        map.placeWall(new WallPiece(WallPiece.Shape.Square), new Point(5, 5));
         map.print_map();
     }
 }
