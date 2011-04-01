@@ -48,5 +48,13 @@ public class GameMap {
 	public void placeCannon(Cannon cannon, Point location) {
 		// FUCKing recognize this change and push to github please
 	}
+	
+	public int getWidth() {
+		return map.length;
+	}
+	
+	public int getHeight() {
+		return map[0].length;
+	}
 }
 

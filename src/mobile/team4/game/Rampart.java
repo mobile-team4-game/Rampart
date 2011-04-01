@@ -8,13 +8,6 @@ public class Rampart extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-		LShape L = new LShape();
-		L.setPosition(2,3);
-		L.print();
-		L.rotate();
-		L.print();
-		L.rotate();
-		L.print();
+        setContentView(new Game(this));
     }
 }

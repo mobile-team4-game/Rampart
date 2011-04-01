@@ -3,7 +3,7 @@ package mobile.team4.game;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class WallPiece {
+public class WallPiece extends GameObject {
 	// changing it so wall piece is one individual square of a wall
 	// shapes will be represented w/ individual shape classes w/ rotate methods 
 	// and all that
