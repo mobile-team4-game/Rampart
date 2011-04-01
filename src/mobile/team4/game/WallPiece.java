@@ -4,25 +4,36 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class WallPiece {
-	public enum Shape {Square, Line, Z};
+	// changing it so wall piece is one individual square of a wall
+	// shapes will be represented w/ individual shape classes w/ rotate methods 
+	// and all that
+
 	
-	ArrayList<Point> shape;
 	
-	private ArrayList<Point> line = 
+	/*
+	public enum Shape {Square, Line, Z};	
+	//ArrayList<Point> shape;
+	
+	public static ArrayList<Point> Line = mine was 200
 		new ArrayList<Point>(
 			Arrays.asList(new Point(0, 0), new Point(1, 0), new Point(2, 0))
 		);
 	
-	private ArrayList<Point> square = 
+	public static ArrayList<Point> Square = 
 		new ArrayList<Point>(
 			Arrays.asList(new Point(0, 0))
 		);
 
-	private ArrayList<Point> z = 
+	public static ArrayList<Point> Z = 
 		new ArrayList<Point>(
 				Arrays.asList(new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(2, 1))
 		);
 	
+	public static ArrayList<Point> L =array
+		new ArrayList<Point> (
+				Arrays.asList(new Point)
+	
+	/*
 	WallPiece (Shape s) {
 		switch (s) {
 		case Line:
@@ -36,4 +47,6 @@ public class WallPiece {
 			break;
 		}
 	}
+	*/
+	
 }

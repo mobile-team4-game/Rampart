@@ -4,10 +4,15 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import android.util.Log;
 
 public class GameMap {
 	int[][] map;
+	
+	public enum Pieces {
+		CannonTopLeft, CannonTopRight, CannonBottomLeft, CannonBottomRight, 
+		CastleTopLeft, CastleTopRight, CastleBottomLeft, CastleBottomRight,
+		Wall, Floor, Grass, Water					
+	}
 	
 	public void print_map() {
 		for (int row = 0; row < map.length; row++) {
@@ -18,8 +23,8 @@ public class GameMap {
 		}
 	}
 	
-	GameMap (int rows, int cols) {
-		map = new int[rows][cols];
+	GameMap (int cols, int rows) {
+		map = new int[cols][rows];
 		
 		// do i actually need to initialize to zero
 		for (int i = 0; i < rows; i++) {
@@ -30,6 +35,7 @@ public class GameMap {
 		
 	}
 	
+	/*
 	public void placeWall(WallPiece piece, Point location) {
 		// using 1 to marked filled, change to represent wall pieces 
 		// vs cannon vs filled floor, etc
@@ -37,8 +43,10 @@ public class GameMap {
 			map[location.x + point.x][location.y + point.y] = 1;
 		}
 	}
+	*/
 	
 	public void placeCannon(Cannon cannon, Point location) {
-		
+		// FUCKing recognize this change and push to github please
 	}
 }
+

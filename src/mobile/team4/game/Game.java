@@ -17,6 +17,10 @@ public class Game {
 	
 	// pretty rough outline
 	
+	public void placeWall(Point position, Shape s) {
+		
+	}
+	
 	public void run() {
 	    while (isRunning) {
 	        while (isPaused && isRunning) {
@@ -50,8 +54,5 @@ public class Game {
 
 	private void updateState() {
 		// TODO Auto-generated method stub
-		
 	}
-
-
 }

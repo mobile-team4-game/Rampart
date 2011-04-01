@@ -1,6 +1,9 @@
 package mobile.team4.game;
 
 public class Point {
+	int x;
+	int y;
+	
 	public Point(int i, int j) {
 		x = i;
 		y = j;
@@ -9,6 +12,4 @@ public class Point {
 		x = p.x;
 		y = p.y;
 	}
-	int x;
-	int y;
 }
