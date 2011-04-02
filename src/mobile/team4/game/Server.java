@@ -173,7 +173,7 @@ public class Server
 	 * 
 	 * @return
 	 */
-	public GameState updateGameState()
+	public GameState getGameState()
 	{
 		String sUrl = GAME_STATE_URL + "game_id=" + Player.getThisPlayer().getGameId();
 		GameState gameState = new GameState();
