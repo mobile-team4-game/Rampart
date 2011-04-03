@@ -1,9 +1,5 @@
 package mobile.team4.game;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
 
 public class GameMap {
 	int[][] map;
@@ -49,6 +45,16 @@ public class GameMap {
 		// FUCKing recognize this change and push to github please
 	}
 	
+	public void placeWall(Point location, Shape shape) {
+		for (Point point : shape.points) {
+			insert_at(point.x + location.x, point.y + location.y, 1);
+		}
+	}
+	
+	public void insert_at(int x, int y, int value) {
+		map[y][x] = value;
+	}
+	
 	public int getWidth() {
 		return map.length;
 	}
@@ -56,5 +62,6 @@ public class GameMap {
 	public int getHeight() {
 		return map[0].length;
 	}
+
 }
 

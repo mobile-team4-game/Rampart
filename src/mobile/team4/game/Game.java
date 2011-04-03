@@ -11,6 +11,8 @@ import android.view.SurfaceView;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
+	GameMap map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
+	
 	GameLoopThread _thread;
 	Boolean isRunning;
 	Boolean isPaused;
@@ -20,25 +22,31 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	static int MAP_HEIGHT = 10;
 	
 	ArrayList<Cannon> cannon_list;
-	// WallPieces are currently lists of points according to shape, want wall_list
-	// to be individual wall squares
-	ArrayList<WallPiece> wall_list;		// Need to implement getPosition()
+	ArrayList<WallPiece> wall_list;
 	ArrayList<BackgroundPiece> background_list;
 	ArrayList<Castle> castle_list;
-	ArrayList<GameObject> shot_list;	//  For cannonballs.
-	GameMap map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
-	
-	// pretty rough outline
+	ArrayList<Shot> shot_list;	//  For cannonballs.
+	GameMap game_map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
+
 	
 	public Game(Context context) {
 		super(context);
 		getHolder().addCallback(this);
         _thread = new GameLoopThread(getHolder(), this);
         setFocusable(true);
+        
+		cannon_list = new ArrayList<Cannon>();
+		wall_list = new ArrayList<WallPiece>();
+		background_list = new ArrayList<BackgroundPiece>();
+		castle_list = new ArrayList<Castle>();
+		shot_list = new ArrayList<Shot>();
 	}
 	
-	public void placeWall(Point position, Shape s) {
-		
+	public void placeWall(Point position, Shape shape) {
+		for (Point point : shape.points) {
+			wall_list.add(new WallPiece(position.x + point.x, position.y + point.y));
+			game_map.placeWall(position, shape);
+		}
 	}
 
 	public void updateAnimations() {
@@ -58,6 +66,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void updateState() {
 		// TODO Auto-generated method stub
+		
+		
 	}
 	
 	public void updateVideo(Canvas c) {

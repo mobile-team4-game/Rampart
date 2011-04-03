@@ -4,7 +4,7 @@ package mobile.team4.game;
 public class Cannon {
 	private Boolean isFiring;
 	Boolean isSurrounded;
-	Point position = new Point(1, 2);
+	Point position;
 	
 	public Boolean isFiring() {
 		return isFiring;

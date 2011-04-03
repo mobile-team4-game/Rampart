@@ -12,4 +12,9 @@ public class Point {
 		x = p.x;
 		y = p.y;
 	}
+	public void swap() {
+		int temp = x;
+		x = y;
+		y = temp;
+	}
 }

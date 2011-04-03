@@ -1,38 +1,35 @@
 package mobile.team4.game;
 
-
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LShape extends Shape {
-	
-	enum State { Horizontal, Vertical }
-	
+
 	//ArrayList<Point> points;
-	State state;
-	
-	static ArrayList<Point> horizontal = new ArrayList<Point>(
-			Arrays.asList(new Point(0, 0), new Point(1, 0), new Point(2, 0))
-	);
-	
-	static ArrayList<Point> vertical = new ArrayList<Point>(
-			Arrays.asList(new Point(0, 0), new Point(0, 1), new Point(0,2))
-		);
-	
+	public ArrayList<ArrayList<Point>> states;
+	int current_state;
+
 	public LShape() {
-		state = State.Horizontal;
-		points = horizontal;
+		// this should be static but I'm not sure how to do it without using add
+		states = new ArrayList<ArrayList<Point>>();
+		states.add( new ArrayList<Point>( Arrays.asList(new Point(0,0), new Point(0,1), 
+														new Point(1,1), new Point(2,1))));
+		
+		states.add( new ArrayList<Point>( Arrays.asList(new Point(0,0), new Point(1,0), 
+														new Point(0,1), new Point(0,2))));
+		
+		states.add( new ArrayList<Point>( Arrays.asList(new Point(0,0), new Point(1,0), 
+														new Point(2,0), new Point(2,1))));
+
+		states.add( new ArrayList<Point>( Arrays.asList(new Point(1,0), new Point(1,1), 
+														new Point(1,2), new Point(0,2))));
+		current_state = 0;
+		points = states.get(current_state);
 	}
-	
+
 	@Override
 	public void rotate() {
-		if (state == State.Horizontal) {
-			state = State.Vertical;
-			points = vertical;
-		} else if (state == State.Vertical) {
-			state = State.Horizontal;
-			points = horizontal;
-		}
+		current_state = (current_state + 1) % 4;
+		points = states.get(current_state);
 	}
 }

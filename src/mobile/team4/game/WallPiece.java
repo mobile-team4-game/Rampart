@@ -1,12 +1,18 @@
 package mobile.team4.game;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class WallPiece extends GameObject {
 	// changing it so wall piece is one individual square of a wall
 	// shapes will be represented w/ individual shape classes w/ rotate methods 
 	// and all that
+	
+	public WallPiece(Point p) {
+		position = p;
+	}
+	
+	public WallPiece(int x, int y) {
+		position.x = x;
+		position.y = y;
+	}
 
 	
 	
