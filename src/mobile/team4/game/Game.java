@@ -45,7 +45,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void placeWall(Point position, Shape shape) {
 		for (Point point : shape.points) {
-			wall_list.add(new WallPiece(position.x + point.x, position.y + point.y));
+			wall_list.add(new WallPiece(position.get_x() + point.get_x(), position.get_y() + point.get_y()));
 			game_map.placeWall(position, shape);
 		}
 	}
@@ -86,19 +86,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		
 		for(int i = 0; i < castle_list.size(); i++) {
 			Point p = castle_list.get(i).getPosition();
-			c.drawBitmap(castle, p.x * gridWidth, p.y * gridHeight, null);
+			c.drawBitmap(castle, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
 		}
 		for(int i = 0; i < cannon_list.size(); i++) {
 			Point p = cannon_list.get(i).getPosition();
-			c.drawBitmap(cannon, p.x * gridWidth, p.y * gridHeight, null);
+			c.drawBitmap(cannon, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
 		}
 		for(int i = 0; i < wall_list.size(); i++) {
 			Point p = wall_list.get(i).getPosition();
-			c.drawBitmap(wall, p.x * gridWidth, p.y * gridHeight, null);
+			c.drawBitmap(wall, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
 		}
 		for(int i = 0; i < shot_list.size(); i++) {
 			Point p = shot_list.get(i).getPosition();
-			c.drawBitmap(cannonball, p.x * gridWidth, p.y * gridHeight, null);
+			c.drawBitmap(cannonball, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
 		}
 	}
 
