@@ -2,7 +2,7 @@ package mobile.team4.game;
 
 
 public class GameMap {
-	int[][] map;
+	private static int[][] map;
 	
 	public enum Pieces {
 		CannonTopLeft, CannonTopRight, CannonBottomLeft, CannonBottomRight, 
@@ -47,7 +47,7 @@ public class GameMap {
 	
 	public void placeWall(Point location, Shape shape) {
 		for (Point point : shape.points) {
-			insert_at(point.x + location.x, point.y + location.y, 1);
+			insert_at(point.get_x() + location.get_y(), point.get_y() + location.get_y(), 1);
 		}
 	}
 	
@@ -62,6 +62,12 @@ public class GameMap {
 	public int getHeight() {
 		return map[0].length;
 	}
+	
+	static public int get_at(int x, int y)
+	{
+		return (map[x][y]);
+	}
+	
 
 }
 
