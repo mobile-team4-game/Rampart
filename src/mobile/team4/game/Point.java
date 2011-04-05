@@ -1,8 +1,8 @@
 package mobile.team4.game;
 
 public class Point {
-	int x;
-	int y;
+	private int x;
+	private int y;
 	
 	public Point(int i, int j) {
 		x = i;
@@ -16,5 +16,15 @@ public class Point {
 		int temp = x;
 		x = y;
 		y = temp;
+	}
+	
+	public int get_x()
+	{
+		return x;
+	}
+	
+	public int get_y()
+	{
+		return y;
 	}
 }
