@@ -2,6 +2,8 @@ package mobile.team4.game;
 
 import java.util.ArrayList;
 
+import mobile.team4.game.BackgroundPiece.Type;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -76,29 +78,39 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		Bitmap castle = BitmapFactory.decodeResource(getResources(), R.drawable.castle);
 		Bitmap cannonball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
 		Bitmap cannon = BitmapFactory.decodeResource(getResources(), R.drawable.cannon);
+		Bitmap grass = BitmapFactory.decodeResource(getResources(), R.drawable.grass);
+		Bitmap water = BitmapFactory.decodeResource(getResources(), R.drawable.water);
 		
 		int gridHeight = getHeight() / map.getHeight();
 		int gridWidth = gridHeight;
 		
 		wall = resizeBitmap(wall, gridHeight, gridWidth);
-		castle = resizeBitmap(castle, gridHeight, gridWidth);
-		cannon = resizeBitmap(cannon, gridHeight, gridWidth);
+		castle = resizeBitmap(castle, 2 * gridHeight, 2 * gridWidth);
+		cannon = resizeBitmap(cannon, 2 * gridHeight, 2 * gridWidth);
 		
 		for(int i = 0; i < castle_list.size(); i++) {
 			Point p = castle_list.get(i).getPosition();
-			c.drawBitmap(castle, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
+			c.drawBitmap(castle, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
 		}
 		for(int i = 0; i < cannon_list.size(); i++) {
 			Point p = cannon_list.get(i).getPosition();
-			c.drawBitmap(cannon, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
+			c.drawBitmap(cannon, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
 		}
 		for(int i = 0; i < wall_list.size(); i++) {
 			Point p = wall_list.get(i).getPosition();
-			c.drawBitmap(wall, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
+			c.drawBitmap(wall, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
 		}
 		for(int i = 0; i < shot_list.size(); i++) {
 			Point p = shot_list.get(i).getPosition();
-			c.drawBitmap(cannonball, p.get_x() * gridWidth, p.get_x() * gridHeight, null);
+			c.drawBitmap(cannonball, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+		}
+		for(int i = 0; i < background_list.size(); i++) {
+			Point p = background_list.get(i).getPosition();
+			if(background_list.get(i).getType() == Type.Grass) {
+				c.drawBitmap(grass, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+			} else {
+				c.drawBitmap(water, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+			}
 		}
 	}
 
