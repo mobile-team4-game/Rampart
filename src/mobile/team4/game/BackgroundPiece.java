@@ -2,7 +2,7 @@ package mobile.team4.game;
 
 public class BackgroundPiece extends GameObject {
 	
-	public enum Type { Grass, Water }
+	public enum Type { Grass, Water, Floor }
 	
 	Type type;
 	

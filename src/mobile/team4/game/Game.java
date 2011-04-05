@@ -30,7 +30,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	ArrayList<Castle> castle_list;
 	ArrayList<Shot> shot_list;	//  For cannonballs.
 	GameMap game_map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
-
+	
+	Bitmap wall, castle, cannonball, cannon, grass, water, floor;
 	
 	public Game(Context context) {
 		super(context);
@@ -43,6 +44,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		background_list = new ArrayList<BackgroundPiece>();
 		castle_list = new ArrayList<Castle>();
 		shot_list = new ArrayList<Shot>();
+		
+		wall = BitmapFactory.decodeResource(getResources(), R.drawable.wall);
+		castle = BitmapFactory.decodeResource(getResources(), R.drawable.castle);
+		cannonball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
+		cannon = BitmapFactory.decodeResource(getResources(), R.drawable.cannon);
+		grass = BitmapFactory.decodeResource(getResources(), R.drawable.grass);
+		water = BitmapFactory.decodeResource(getResources(), R.drawable.water);
+		floor = BitmapFactory.decodeResource(getResources(), R.drawable.floor);
 	}
 	
 	public void placeWall(Point position, Shape shape) {
@@ -74,12 +83,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	public void updateVideo(Canvas c) {
-		Bitmap wall = BitmapFactory.decodeResource(getResources(), R.drawable.wall);
-		Bitmap castle = BitmapFactory.decodeResource(getResources(), R.drawable.castle);
-		Bitmap cannonball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
-		Bitmap cannon = BitmapFactory.decodeResource(getResources(), R.drawable.cannon);
-		Bitmap grass = BitmapFactory.decodeResource(getResources(), R.drawable.grass);
-		Bitmap water = BitmapFactory.decodeResource(getResources(), R.drawable.water);
 		
 		int gridHeight = getHeight() / map.getHeight();
 		int gridWidth = gridHeight;
@@ -88,6 +91,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		castle = resizeBitmap(castle, 2 * gridHeight, 2 * gridWidth);
 		cannon = resizeBitmap(cannon, 2 * gridHeight, 2 * gridWidth);
 		
+		for(int i = 0; i < background_list.size(); i++) {
+			Point p = background_list.get(i).getPosition();
+			if(background_list.get(i).getType() == Type.Floor) {
+				c.drawBitmap(floor, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+			} else if(background_list.get(i).getType() == Type.Grass) {
+				c.drawBitmap(grass, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+			} else if(background_list.get(i).getType() == Type.Water){
+				c.drawBitmap(water, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+			}
+		}
 		for(int i = 0; i < castle_list.size(); i++) {
 			Point p = castle_list.get(i).getPosition();
 			c.drawBitmap(castle, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
@@ -103,14 +116,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		for(int i = 0; i < shot_list.size(); i++) {
 			Point p = shot_list.get(i).getPosition();
 			c.drawBitmap(cannonball, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-		}
-		for(int i = 0; i < background_list.size(); i++) {
-			Point p = background_list.get(i).getPosition();
-			if(background_list.get(i).getType() == Type.Grass) {
-				c.drawBitmap(grass, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-			} else {
-				c.drawBitmap(water, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-			}
 		}
 	}
 
