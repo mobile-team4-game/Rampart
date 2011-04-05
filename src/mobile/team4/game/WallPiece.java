@@ -10,8 +10,8 @@ public class WallPiece extends GameObject {
 	}
 	
 	public WallPiece(int x, int y) {
-		position.x = x;
-		position.y = y;
+		Point p = new Point(x, y);
+		setPosition(p);
 	}
 
 	

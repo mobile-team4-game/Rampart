@@ -89,10 +89,10 @@ public class Server
 	public void addShot(Point origin, Point target)
 	{
 		String sUrl = 	FIRE_URL + 
-						"from_x=" + origin.x + 
-						"&from_y=" + origin.y +
-						"&to_x=" + target.x +
-						"&to_y=" + target.y +
+						"from_x=" + origin.get_x() + 
+						"&from_y=" + origin.get_y() +
+						"&to_x=" + target.get_x() +
+						"&to_y=" + target.get_y() +
 						"&game_id=" + Player.getThisPlayer().getGameId() +
 						"&player_id=" + Player.getThisPlayer().playerId;
 		
@@ -108,7 +108,7 @@ public class Server
 		for(Iterator<Point> it = locations.iterator(); it.hasNext();)
 		{
 			point = it.next();
-			sUrl += "x[]=" + point.x + "&y[]=" + point.y + "&";
+			sUrl += "x[]=" + point.get_x() + "&y[]=" + point.get_y() + "&";
 		}
 		
 		sUrl +=  	"game_id=" + Player.getThisPlayer().getGameId() +
@@ -121,8 +121,8 @@ public class Server
 	
 	private void removeGameObject(Point location, String sUrl)
 	{
-		sUrl += "x=" + location.x + 
-						"&y=" + location.y + 
+		sUrl += "x=" + location.get_x() + 
+						"&y=" + location.get_y() + 
 						"&game_id=" + Player.getThisPlayer().getGameId();
 		
 		this.LogUrl(sUrl);

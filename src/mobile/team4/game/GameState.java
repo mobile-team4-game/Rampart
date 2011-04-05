@@ -32,25 +32,25 @@ public class GameState
 		for(Iterator<Shot> it = shots.iterator(); it.hasNext();)
 		{
 			f = it.next();
-			s += "shot: <" + f.position.x + "," + f.position.y + "> , < " + f.target.x + "," + f.target.y + ">\n";
+			s += "shot: <" + f.position.get_x() + "," + f.position.get_y() + "> , < " + f.target.get_x() + "," + f.target.get_y() + ">\n";
 		}
 		
 		for(Iterator<Point> it = walls.iterator(); it.hasNext();)
 		{
 			p = it.next();
-			s += "wall: <" + p.x + ", " + p.y + ">\n";
+			s += "wall: <" + p.get_x() + ", " + p.get_y() + ">\n";
 		}
 		
 		for(Iterator<Point> it = cannons.iterator(); it.hasNext();)
 		{
 			p = it.next();
-			s += "cannon: <" + p.x + ", " + p.y + ">\n";
+			s += "cannon: <" + p.get_x() + ", " + p.get_y() + ">\n";
 		}
 		
 		for(Iterator<Point> it = castles.iterator(); it.hasNext();)
 		{
 			p = it.next();
-			s += "castle: <" + p.x + ", " + p.y + ">\n";
+			s += "castle: <" + p.get_x() + ", " + p.get_y() + ">\n";
 		}
 		
 		return s;

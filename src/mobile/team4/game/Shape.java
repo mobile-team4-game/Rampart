@@ -7,7 +7,7 @@ abstract class Shape extends GameObject {
 	abstract public void rotate();
 	public void print() {
 		for (Point p : points) {
-			System.out.println(p.x + ", " + p.y);
+			System.out.println(p.get_x() + ", " + p.get_y());
 		}
 	}
 }
