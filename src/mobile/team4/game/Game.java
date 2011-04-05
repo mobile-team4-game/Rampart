@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -76,8 +77,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		Bitmap cannonball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
 		Bitmap cannon = BitmapFactory.decodeResource(getResources(), R.drawable.cannon);
 		
-		int gridWidth = getWidth() / map.getWidth();
 		int gridHeight = getHeight() / map.getHeight();
+		int gridWidth = gridHeight;
+		
+		wall = resizeBitmap(wall, gridHeight, gridWidth);
+		castle = resizeBitmap(castle, gridHeight, gridWidth);
+		cannon = resizeBitmap(cannon, gridHeight, gridWidth);
 		
 		for(int i = 0; i < castle_list.size(); i++) {
 			Point p = castle_list.get(i).getPosition();
@@ -120,5 +125,16 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             } catch (InterruptedException e) {
             }
         }		
+	}
+	
+	private Bitmap resizeBitmap(Bitmap bm, int newHeight, int newWidth) {
+		int width = bm.getWidth();
+		int height = bm.getHeight();
+		float widthScale = ((float)newWidth) / width;
+		float heightScale = ((float)newHeight) / height;
+		Matrix matrix = new Matrix();
+		matrix.postScale(widthScale, heightScale);
+		Bitmap resizedbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+		return resizedbm;
 	}
 }
