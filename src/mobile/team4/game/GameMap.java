@@ -25,7 +25,7 @@ public class GameMap {
 		// do i actually need to initialize to zero
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				map[i][j] = 0;
+				map[i][j] = Pieces.Grass.ordinal();
 			}
 		}
 		
