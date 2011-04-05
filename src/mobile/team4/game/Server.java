@@ -1,11 +1,14 @@
 package mobile.team4.game;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Vector;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 
@@ -13,7 +16,7 @@ import android.util.Log;
  * Server will handle all communication with the server. Here you
  * will make requests to send, update, receive information from
  * the server. This includes player information, game information,
- * coordinates and sources of shots that were fired, and WallPiece
+ * coordinates and sources of shots that were shotd, and WallPiece
  * information.
  *  
  * @author Martin Brown
@@ -25,10 +28,23 @@ public class Server
 	 * This is the base URL for the server
 	 */
 	private static final String BASE_URL = "http://droidelicious.com/rampart/";
-	private static final String FIRE_URL = BASE_URL + "fire.php?";
-	private static final String WALL_URL = BASE_URL + "wall.php?";
-	private static final String CANNON_URL = BASE_URL + "cannon.php?";
+	
+	private static final String MODE_URL = BASE_URL + "mode.php?";
+	private static final String GAME_URL = BASE_URL + "game.php?";
+	
+	private static final String FIRE_URL = BASE_URL + "shot.php?";
+	
+	private static final String ADD_WALL_URL = BASE_URL + "add_wall.php?";
+	private static final String ADD_CANNON_URL = BASE_URL + "add_cannon.php?";
+	private static final String ADD_CASTLE_URL = BASE_URL + "add_castle.php?";
+	
+	private static final String REMOVE_WALL_URL = BASE_URL + "remove_wall.php?";
+	private static final String REMOVE_CANNON_URL = BASE_URL + "remove_cannon.php?";
+	private static final String REMOVE_CASTLE_URL = BASE_URL + "remove_castle.php?";
+	
 	private static final String GAME_STATE_URL = BASE_URL + "game_state.php?";
+	
+	private double lastUpdate;
 	
 	private Server(){}
 	
@@ -42,14 +58,75 @@ public class Server
 		return SingletonHolder.INSTANCE;
 	}
 	
+	public void updateGameMode(GameState.Mode mode)
+	{
+		String sUrl = MODE_URL + "game_id=" + Player.getThisPlayer().getGameId() + 
+						"&mode=" + mode.toString();
+		
+		this.LogUrl(sUrl);
+		
+		this.getUrlData(sUrl);
+	}
+	
+	public int newGame()
+	{
+		int gameId;
+		String sUrl = GAME_URL + "player_id=" + Player.getThisPlayer().playerId;
+		
+		this.LogUrl(sUrl);
+		
+		gameId = Integer.parseInt(this.getUrlData(sUrl));
+		Player.getThisPlayer().setGameId(gameId);
+		
+		return gameId;
+	}
+	
 	/**
 	 * Let the server know where shots originate from
 	 * and are targeted to
 	 * @param target
 	 */
-	public void addFire(Point origin, Point target)
+	public void addShot(Point origin, Point target)
 	{
+		String sUrl = 	FIRE_URL + 
+						"from_x=" + origin.x + 
+						"&from_y=" + origin.y +
+						"&to_x=" + target.x +
+						"&to_y=" + target.y +
+						"&game_id=" + Player.getThisPlayer().getGameId() +
+						"&player_id=" + Player.getThisPlayer().playerId;
 		
+		this.LogUrl(sUrl);
+		
+		this.getUrlData(sUrl);
+	}
+	
+	private void addGameObjects(Vector<Point> locations, String sUrl)
+	{
+		Point point;
+		
+		for(Iterator<Point> it = locations.iterator(); it.hasNext();)
+		{
+			point = it.next();
+			sUrl += "x[]=" + point.x + "&y[]=" + point.y + "&";
+		}
+		
+		sUrl +=  	"game_id=" + Player.getThisPlayer().getGameId() +
+					"&player_id=" + Player.getThisPlayer().playerId;
+		
+		this.LogUrl(sUrl);
+		
+		this.getUrlData(sUrl);
+	}
+	
+	private void removeGameObject(Point location, String sUrl)
+	{
+		sUrl += "x=" + location.x + 
+						"&y=" + location.y + 
+						"&game_id=" + Player.getThisPlayer().getGameId();
+		
+		this.LogUrl(sUrl);
+		this.getUrlData(sUrl);
 	}
 	
 	/**
@@ -58,9 +135,9 @@ public class Server
 	 * @param wallPieces
 	 * @param locations
 	 */
-	public void addWallPieces(Vector<WallPiece> wallPieces, Vector<Point> locations)
+	public void addWallPieces(Vector<Point> locations)
 	{
-		
+		this.addGameObjects(locations, ADD_WALL_URL);
 	}
 	
 	/**
@@ -69,7 +146,29 @@ public class Server
 	 */
 	public void addCannons(Vector<Point> locations)
 	{
-		
+		this.addGameObjects(locations, ADD_CANNON_URL);
+	}
+	
+	public void addCastle(Point location)
+	{
+		Vector<Point> castle = new Vector<Point>();
+		castle.add(location);
+		this.addGameObjects(castle, ADD_CASTLE_URL);
+	}
+	
+	public void removeWall(Point point)
+	{
+		this.removeGameObject(point, REMOVE_WALL_URL);
+	}
+	
+	public void removeCannon(Point point)
+	{
+		this.removeGameObject(point, REMOVE_CANNON_URL);
+	}
+	
+	public void removeCastle(Point point)
+	{
+		this.removeGameObject(point, REMOVE_CASTLE_URL);
 	}
 	
 	/**
@@ -79,13 +178,80 @@ public class Server
 	 * 
 	 * @return
 	 */
-	public GameState updateGameState()
+	public GameState getGameState()
 	{
-		GameState gs = new GameState();
+		String sUrl = GAME_STATE_URL + "game_id=" + Player.getThisPlayer().getGameId();
+		GameState gameState = new GameState();
 		
+		this.LogUrl(sUrl);
 		
+		String sState = this.getUrlData(sUrl);
 		
-		return gs;
+		JSONObject json, jShot, jWall, jCannon;
+		JSONArray shots, walls, cannons;
+		String serverTime;
+		String mode;
+		
+		Shot shot;
+		Point p;
+		
+		try 
+		{
+			json = new JSONObject(sState);
+
+			serverTime = json.optString("serverTime");
+			mode = json.optString("mode");
+			
+			shots = json.getJSONArray("shots");
+			walls = json.getJSONArray("walls");
+			cannons = json.getJSONArray("cannons");
+			
+			gameState.serverTime = Double.valueOf(serverTime);
+			gameState.mode = GameState.Mode.valueOf(mode);
+			
+			int i;
+			
+			for(i = 0; i < shots.length(); i++)
+			{
+				jShot = shots.getJSONObject(i);
+				JSONObject from, to;
+				from = jShot.getJSONObject("from");
+				to = jShot.getJSONObject("to");
+				shot = new Shot(new Point(from.optInt("x"),from.optInt("y")), 
+								new Point(to.optInt("x"), to.optInt("y")));
+				gameState.shots.add(shot);
+			}
+			
+			for(i = 0; i < walls.length(); i++)
+			{
+				jWall = walls.getJSONObject(i);
+				
+				gameState.walls.add(new Point(jWall.optInt("x"), jWall.optInt("y")));
+			}
+			
+			for(i = 0; i < cannons.length(); i++)
+			{
+				jCannon = cannons.getJSONObject(i);
+				
+				gameState.cannons.add(new Point(jCannon.optInt("x"), jCannon.optInt("y")));
+			}
+			
+			Log.i("gameState", gameState.toString());
+		} 
+		catch (JSONException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Log.i("data",sState);
+		
+		return gameState;
+	}
+	
+	private void LogUrl(String sUrl)
+	{
+		Log.i("GameServer",sUrl);
 	}
 	
 	/**
@@ -105,61 +271,41 @@ public class Server
 		try 
 		{
 			url = new URL(sUrl);
-		} 
-		catch (MalformedURLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try 
-		{
-			in = new BufferedReader(new InputStreamReader(url.openStream()));
-		} 
-		catch (IOException e1) 
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		Log.i("getUrl","url = " + sUrl);
-		
-		try 
-		{
-			while ((str = in.readLine()) != null) 
+			
+			try 
 			{
-				Log.i("getUrl",str);
-				buff.append(str);
+				in = new BufferedReader(new InputStreamReader(url.openStream()));
+				
+				try 
+				{
+					while ((str = in.readLine()) != null) 
+					{
+						Log.i("getUrl",str);
+						buff.append(str);
+					}
+				} 
+				catch (Exception e)
+				{
+					// TODO Auto-generated catch block
+					Log.i("getUrl",e.toString());
+				}
+			} 
+			catch (Exception e) 
+			{
+				// TODO Auto-generated catch block
+				Log.i("getUrl",e.toString());
 			}
+			
+			return buff.toString();
 		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.i("getUrl",e.toString());
 		}
 		
-		return buff.toString();
+		Log.i("getUrl","return ''");
+		
+		return "";
 	}
 }
-
-/**
- * Where are the walls? Where did shots come from and
- * where are the shots targeted to?
- * 
- * @author Martin Brown
- *
- */
-class GameState
-{
-	public Mode mode;
-	public Vector<Fire> fires = new Vector<Fire>();
-	public Vector<WallPiece> wallPieces = new Vector<WallPiece>();
-}
-
-class Fire
-{
-	public Point from;
-	public Point to;
-}
-
-enum Mode {PAUSED, REBUILD, CANNONS, BATTLE};
