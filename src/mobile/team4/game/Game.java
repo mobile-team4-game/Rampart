@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -50,12 +51,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		server = Server.getInstance();
 		server.newGame();
 		mode = Mode.CANNONS;
+		cannonsToPlace = 3;
 		
 		stateTimer = new Timer();
 		frameTimer = new Timer();
 		stateTimer.start();
 		frameTimer.start();
 		gd = new GestureDetector(this);
+		gd.setOnDoubleTapListener(this);
 	}
 	
 	public void init() {
@@ -105,6 +108,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		/*
 		if(stateTimer.getElapsedTime() > 200) {		// Calls 5 times per second.
 			state = server.getGameState();
+			if(mode == Mode.REBUILD && state.mode == Mode.CANNONS) {
+				cannonsToPlace = 3;
+			}
 			mode = state.mode;
 			stateTimer.start();
 		}
@@ -207,7 +213,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onDown(MotionEvent e) {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
@@ -245,19 +251,34 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onDoubleTap(MotionEvent e) {
+		Log.d("Rampart", "onDoubleTap.");
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onDoubleTapEvent(MotionEvent e) {
+		Log.d("Rampart", "onDoubleTapEvent.");
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent e) {
-		// TODO Auto-generated method stub
+		Log.d("Rampart", "onSingleTapConfirmed.");
+		if(mode == Mode.CANNONS){  
+			if(cannonsToPlace > 0) {
+				int x = (int)(e.getX() / gridWidth);
+				int y = (int)(e.getY() / gridHeight);
+				if(x > 0 && x < MAP_WIDTH) {
+					if(y > 0 && y < MAP_HEIGHT) { 
+						Point pos = new Point(x, y);
+						map.insert_at(x, y, new Cannon(pos));
+						cannonsToPlace--;
+					}
+				}
+			}
+		}	
 		return false;
 	}
 }
