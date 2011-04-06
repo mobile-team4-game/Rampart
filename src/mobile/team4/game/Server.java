@@ -3,6 +3,7 @@ package mobile.team4.game;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -147,6 +148,17 @@ public class Server
 		this.getUrlData(sUrl);
 	}
 	
+	public void addShot(ArrayList<Shot> shots)
+	{
+		Shot shot;
+		
+		for(Iterator<Shot> it = shots.iterator(); it.hasNext();)
+		{
+			shot = it.next();
+			addShot(shot.getPosition(), shot.target);
+		}
+	}
+	
 	private void addGameObjects(Vector<Point> locations, String sUrl)
 	{
 		Point point;
@@ -193,6 +205,18 @@ public class Server
 	public void addCannons(Vector<Point> locations)
 	{
 		this.addGameObjects(locations, ADD_CANNON_URL);
+	}
+	
+	public void addCannons(ArrayList<Cannon> cannons)
+	{
+		Vector<Point> points = new Vector<Point>();
+		
+		for(Iterator<Cannon> it = cannons.iterator(); it.hasNext();)
+		{
+			points.add(it.next().position);
+		}
+		
+		addCannons(points);
 	}
 	
 	public void addCastle(Point location)
