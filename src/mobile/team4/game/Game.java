@@ -25,10 +25,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	static int MAP_HEIGHT = 10;
 	int gridHeight, gridWidth;
 	
-	ArrayList<Cannon> cannon_list;
-	ArrayList<WallPiece> wall_list;
-	ArrayList<BackgroundPiece> background_list;
-	ArrayList<Castle> castle_list;
 	ArrayList<Shot> shot_list;	//  For cannonballs.
 	GameMap game_map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
 	Bitmap wall, castle, cannonball, cannon, grass, water, floor;
@@ -40,15 +36,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
         
 		shot_list = new ArrayList<Shot>();
-		
-		for (int i = 0; i < MAP_WIDTH; i++) {
-			for (int j = 0; j < MAP_HEIGHT; j++) {
-				BackgroundPiece bg = new BackgroundPiece(Type.Grass);
-				Point p = new Point(i, j);
-				bg.setPosition(p);
-				background_list.add(bg);
-			}
-		}
 	}
 	
 	public void init() {
@@ -70,7 +57,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void placeWall(Point position, Shape shape) {
 		for (Point point : shape.points) {
-			wall_list.add(new WallPiece(position.get_x() + point.get_x(), position.get_y() + point.get_y()));
 			game_map.placeWall(position, shape);
 		}
 	}
@@ -102,7 +88,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void updateVideo(Canvas c) {
 		for(int i = 0; i < MAP_WIDTH; i++) {
-			for(int j = 0; j < MAP_HEIGHT; i++) {
+			for(int j = 0; j < MAP_HEIGHT; j++) {
 				GameObject toDraw = map.get_at(i, j);
 				Point p = toDraw.getPosition();
 				switch(toDraw.getType()) {

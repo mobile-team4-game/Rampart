@@ -1,6 +1,5 @@
 package mobile.team4.game;
 
-
 public class GameMap {
 	private static GameObject[][] map;
 	
@@ -26,6 +25,7 @@ public class GameMap {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				map[i][j] = new BackgroundPiece(GameObject.Type.Grass);
+				map[i][j].setPosition(i, j);
 			}
 		}
 		
@@ -53,10 +53,12 @@ public class GameMap {
 	}
 	
 	public void insert_at(Point position, GameObject object) {
+		object.setPosition(position);
 		map[position.get_y()][position.get_x()] = object;
 	}
 	
 	public void insert_at(int x, int y, GameObject object) {
+		object.setPosition(x, y);
 		map[y][x] = object;
 	}
 	
@@ -70,7 +72,7 @@ public class GameMap {
 	
 	public GameObject get_at(int x, int y)
 	{
-		return (map[x][y]);
+		return (map[y][x]);
 	}
 	
 
