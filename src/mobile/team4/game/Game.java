@@ -2,6 +2,7 @@ package mobile.team4.game;
 
 import java.util.ArrayList;
 
+import mobile.team4.game.GameObject.Type;
 import mobile.team4.game.GameState.Mode;
 
 import android.content.Context;
@@ -31,6 +32,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	static int MAX_VELOCITY = 10;
 	int gridHeight, gridWidth;
 	int cannonsToPlace;
+	int numCannons;
 	
 	ArrayList<Shot> shot_list;	//  For cannonballs.
 	GameMap map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
@@ -55,9 +57,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		server.newGame();
 		mode = Mode.CANNONS;
 		cannonsToPlace = 3;
-		
 		toPlace = new TShape();
-		
+		numCannons = 0;
 		stateTimer = new Timer();
 		frameTimer = new Timer();
 		stateTimer.start();
@@ -142,7 +143,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 					((pos.get_y() - s.y) * (pos.get_y() - s.y)));
 			double dMoved = MAX_VELOCITY / elapsedTime;
 			if(dMoved > distance) {
-				map.insert_at(s.target, new BackgroundPiece(GameObject.Type.Grass));
+				map.insert_at(s.target, new BackgroundPiece(GameObject.Type.Grass, s.target));
 				shot_list.remove(i);
 			} else {
 				shot_list.get(i).x += dMoved * (pos.get_x() - s.x);
@@ -218,6 +219,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
+		/*
 		int x = (int)(e.getX() / gridWidth);
 		int y = (int)(e.getY() / gridHeight);
 		if(mode == Mode.CANNONS){  
@@ -232,28 +234,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 			} else {
 				mode = Mode.REBUILD;
 			}
-			// temp testin
 		}	
-		
-		if (mode == Mode.REBUILD) {
-			//Shape L = new LShape();
-			//Shape T = new TShape();
-			//map.placeWall(new Point(x,y), T);
-			if (x == toPlace.getPosition().get_x() && y == toPlace.getPosition().get_y()) {
-				map.placeWall(new Point(x,y), toPlace);
-				toPlace.setPosition(0,0);
-				toPlace.rotate();
-			} else {
-				toPlace.setPosition(x, y);
-			}
-		}
+		*/
 		return gd.onTouchEvent(e);
 	}
 
 	@Override
 	public boolean onDown(MotionEvent e) {
-
-		return false;
+		return true;
 	}
 
 	@Override
@@ -284,7 +272,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
-		// TODO Auto-generated method stub
+		Log.d("Rampart", "onSingleTapUp.");
+		if(mode == Mode.BATTLE) {
+			
+		}
 		return false;
 	}
 
@@ -304,20 +295,51 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent e) {
-		Log.d("Rampart", "onSingleTapConfirmed.");
-		if(mode == Mode.CANNONS){  
-			if(cannonsToPlace > 0) {
-				int x = (int)(e.getX() / gridWidth);
-				int y = (int)(e.getY() / gridHeight);
-				if(x > 0 && x < MAP_WIDTH) {
-					if(y > 0 && y < MAP_HEIGHT) { 
-						Point pos = new Point(x, y);
-						map.insert_at(x, y, new Cannon(pos));
-						cannonsToPlace--;
+			Log.d("Rampart", "onSingleTapConfirmed.");
+			int x = (int)(e.getX() / gridWidth);
+			int y = (int)(e.getY() / gridHeight);
+			if(mode == Mode.CANNONS){  
+				if(cannonsToPlace > 0) {
+					if(x > 0 && x < MAP_WIDTH) {
+						if(y > 0 && y < MAP_HEIGHT) { 
+							GameObject go[] = new GameObject[4];
+							go[0] = map.get_at(x, y);
+							go[1] = map.get_at(x + 1, y);
+							go[2] = map.get_at(x, y + 1);
+							go[3] = map.get_at(x + 1, y + 1);
+							if((go[0].getType() == Type.Grass || go[0].getType() == Type.Floor)
+									&& (go[1].getType() == Type.Grass || go[1].getType() == Type.Floor)
+									&& (go[2].getType() == Type.Grass || go[2].getType() == Type.Floor)
+									&& (go[3].getType() == Type.Grass || go[3].getType() == Type.Floor)) {
+								Point pos = new Point(x, y);
+								map.insert_at(x, y, new Cannon(pos));
+								GameObject g = map.get_at(pos);
+								map.insert_at(x + 1, y, g);
+								map.insert_at(x, y + 1, g);
+								map.insert_at(x + 1, y + 1, g);
+								cannonsToPlace--;
+								numCannons++;
+								if(cannonsToPlace == 0) {
+									mode = Mode.REBUILD;
+									return false;
+								}
+							}
+						}
 					}
 				}
 			}
-		}	
+			if (mode == Mode.REBUILD) {
+				//Shape L = new LShape();
+				//Shape T = new TShape();
+				//map.placeWall(new Point(x,y), T);
+				if (x == toPlace.getPosition().get_x() && y == toPlace.getPosition().get_y()) {
+					map.placeWall(new Point(x,y), toPlace);
+					toPlace.setPosition(0,0);
+					toPlace.rotate();
+				} else {
+					toPlace.setPosition(x, y);
+				}
+			}
 		return false;
 	}
 }
