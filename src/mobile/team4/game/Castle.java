@@ -7,9 +7,11 @@ public class Castle extends GameObject {
 	
 	Castle(int x, int y)
 	{
+		// is super implied?
 		super.setPosition(x, y);
 	}
 	
+	/*
 	boolean addWallPiece(WallPiece wp)
 	{
 		if (GameMap.get_at(wp.getPosition().get_x(), wp.getPosition().get_y()) == 0)
@@ -19,6 +21,7 @@ public class Castle extends GameObject {
 		}
 		return true;
 	}
+	*/
 	
 	public boolean isFullyEnclosed()
 	{
