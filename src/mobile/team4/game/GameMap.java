@@ -52,7 +52,8 @@ public class GameMap {
 	}
 	public void placeWall(Point location, Shape shape) {
 		for (Point point : shape.points) {
-			if (get_at(point).getType() != Type.Grass) {
+			Point p = new Point(point.get_x() + location.get_x(), point.get_y() + location.get_y());
+			if (get_at(p).getType() != Type.Grass) {
 				return;
 			}
 		}
