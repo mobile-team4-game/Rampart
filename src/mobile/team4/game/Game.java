@@ -32,6 +32,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	static int MAX_VELOCITY = 1;
 	int gridHeight, gridWidth;
 	int cannonsToPlace;
+	int wallsToPlace;
 	int numCannons;
 	
 	ArrayList<Shot> shot_list;	//  For cannonballs.
@@ -59,6 +60,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		server.newGame();
 		mode = Mode.CANNONS;
 		cannonsToPlace = 3;
+		wallsToPlace = 3;
 		toPlace = new TShape();
 		numCannons = 0;
 		stateTimer = new Timer();
@@ -288,6 +290,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		Log.d("Rampart", "onSingleTapUp.");
+		/*
 		if(mode == Mode.BATTLE) {
 			int x = (int)(e.getX() / gridWidth);
 			int y = (int)(e.getY() / gridHeight);
@@ -303,8 +306,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 					}
 				}
 			}
-		} 
+		}  */
 		return false;
+		
 	}
 
 	@Override
@@ -349,7 +353,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 								cannonsToPlace--;
 								numCannons++;
 								if(cannonsToPlace == 0) {
-									mode = Mode.BATTLE;
+									mode = Mode.REBUILD;
 									return false;
 								}
 							}
@@ -361,14 +365,38 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 				//Shape L = new LShape();
 				//Shape T = new TShape();
 				//map.placeWall(new Point(x,y), T);
-				if (x == toPlace.getPosition().get_x() && y == toPlace.getPosition().get_y()) {
-					map.placeWall(new Point(x,y), toPlace);
-					toPlace.setPosition(0,0);
-					toPlace.rotate();
+				if (wallsToPlace > 0) {
+					//if (x == toPlace.getPosition().get_x() && y == toPlace.getPosition().get_y()) {
+						map.placeWall(new Point(x,y), toPlace);
+						toPlace.setPosition(0,0);
+						toPlace.rotate();
+						--wallsToPlace;
+					//} else {
+					//	toPlace.setPosition(x, y);
+					//}
 				} else {
-					toPlace.setPosition(x, y);
+					mode = Mode.BATTLE;
 				}
+
 			}
+			if(mode == Mode.BATTLE) {
+				if(x > 0 && x < MAP_WIDTH) {
+					if(y > 0 && y < MAP_HEIGHT) { 
+						for(int i = 0; i < cannon_list.size(); i++) {
+							if(!cannon_list.get(i).isFiring()) {
+								Log.d("Rampart", "Adding a shot.");
+								cannon_list.get(i).setFiring(true);
+								Point target = new Point(x, y);
+								shot_list.add(new Shot(new Point(cannon_list.get(i).getPosition()), target));
+								if (map.get_at(target).getType() == Type.Wall) {
+									map.delete_at(target);
+								}
+								break;
+							}
+						}
+					}
+				}
+			} 
 		return false;
 	}
 }

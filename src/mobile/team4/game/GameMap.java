@@ -91,6 +91,11 @@ public class GameMap {
 	{
 		return (map[p.get_y()][p.get_x()]);
 	}
+	
+	//temp
+	public void delete_at(Point p) {
+		map[p.get_y()][p.get_x()] = new BackgroundPiece(Type.Grass, p);
+	}
 
 }
 
