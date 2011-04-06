@@ -11,13 +11,15 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestureListener {
+public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestureListener,
+	OnDoubleTapListener {
 	
 	GameLoopThread _thread;
 	Boolean isRunning;
@@ -48,7 +50,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		shot_list = new ArrayList<Shot>();
 		Player player = new Player();
 		server = Server.getInstance();
-		//server.newGame();
+		server.newGame();
 		mode = Mode.CANNONS;
 		
 		stateTimer = new Timer();
@@ -248,6 +250,24 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onDoubleTap(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onDoubleTapEvent(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onSingleTapConfirmed(MotionEvent e) {
 		// TODO Auto-generated method stub
 		return false;
 	}
