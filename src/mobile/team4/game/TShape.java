@@ -11,6 +11,7 @@ public class TShape extends Shape {
 	int current_state;
 
 	public TShape() {
+		position = new Point(0,0);
 		// this should be static but I'm not sure how to do it without using add
 		states = new ArrayList<ArrayList<Point>>();
 		states.add( new ArrayList<Point>( Arrays.asList(new Point(0,0), new Point(1,0), 

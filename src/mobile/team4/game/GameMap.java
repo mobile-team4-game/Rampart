@@ -50,7 +50,7 @@ public class GameMap {
 	public void placeWall(Point location, Shape shape) {
 		for (Point point : shape.points) {
 			if (get_at(point).getType() != Type.Grass) {
-				break;
+				return;
 			}
 		}
 		

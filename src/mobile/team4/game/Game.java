@@ -41,6 +41,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	Timer stateTimer, frameTimer;
 	GestureDetector gd;
 	
+	Shape toPlace;
+	
 	public Game(Context context) {
 		super(context);
 		getHolder().addCallback(this);
@@ -53,6 +55,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		server.newGame();
 		mode = Mode.CANNONS;
 		cannonsToPlace = 3;
+		
+		toPlace = new TShape();
 		
 		stateTimer = new Timer();
 		frameTimer = new Timer();
@@ -168,6 +172,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 				}
 			}
 		}
+		
+		for (Point point : toPlace.points) {
+			Point p = new Point(point.get_x() + toPlace.getPosition().get_x(), point.get_y() + toPlace.getPosition().get_y());
+			c.drawBitmap(wall, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+		}
 	}
 
 	@Override
@@ -209,6 +218,35 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
+		int x = (int)(e.getX() / gridWidth);
+		int y = (int)(e.getY() / gridHeight);
+		if(mode == Mode.CANNONS){  
+			if(cannonsToPlace > 0) {
+				if(x > 0 && x < MAP_WIDTH) {
+					if(y > 0 && y < MAP_HEIGHT) { 
+						Point pos = new Point(x, y);
+						map.insert_at(x, y, new Cannon(pos));
+						cannonsToPlace--;
+					}
+				}
+			} else {
+				mode = Mode.REBUILD;
+			}
+			// temp testin
+		}	
+		
+		if (mode == Mode.REBUILD) {
+			//Shape L = new LShape();
+			//Shape T = new TShape();
+			//map.placeWall(new Point(x,y), T);
+			if (x == toPlace.getPosition().get_x() && y == toPlace.getPosition().get_y()) {
+				map.placeWall(new Point(x,y), toPlace);
+				toPlace.setPosition(0,0);
+				toPlace.rotate();
+			} else {
+				toPlace.setPosition(x, y);
+			}
+		}
 		return gd.onTouchEvent(e);
 	}
 
