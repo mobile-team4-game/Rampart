@@ -48,7 +48,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		shot_list = new ArrayList<Shot>();
 		Player player = new Player();
 		server = Server.getInstance();
-		//server.newGame();
+		server.newGame();
 		mode = Mode.CANNONS;
 		
 		stateTimer = new Timer();
