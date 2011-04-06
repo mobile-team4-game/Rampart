@@ -6,10 +6,12 @@ public class WallPiece extends GameObject {
 	// and all that
 	
 	public WallPiece(Point p) {
+		type = GameObject.Type.Wall;
 		position = p;
 	}
 	
 	public WallPiece(int x, int y) {
+		type = GameObject.Type.Wall;
 		Point p = new Point(x, y);
 		setPosition(p);
 	}

@@ -1,11 +1,14 @@
 package mobile.team4.game;
 
 
-public class Cannon {
+public class Cannon extends GameObject {
 	private Boolean isFiring;
 	Boolean isSurrounded;
-	Point position;
 	
+	public Cannon(Point pos) {
+		position = pos;
+	}
+
 	public Boolean isFiring() {
 		return isFiring;
 	}

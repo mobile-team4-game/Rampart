@@ -2,7 +2,7 @@ package mobile.team4.game;
 
 import java.util.ArrayList;
 
-import mobile.team4.game.BackgroundPiece.Type;
+import mobile.team4.game.GameObject.Type;
 import mobile.team4.game.GameMap.Pieces;
 
 import android.content.Context;

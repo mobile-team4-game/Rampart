@@ -8,6 +8,7 @@ public class Castle extends GameObject {
 	Castle(int x, int y)
 	{
 		// is super implied?
+		type = GameObject.Type.Castle;
 		super.setPosition(x, y);
 	}
 	

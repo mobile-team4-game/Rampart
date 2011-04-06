@@ -25,7 +25,7 @@ public class GameMap {
 		// do i actually need to initialize to zero
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				map[i][j] = new BackgroundPiece(BackgroundPiece.Type.Grass);
+				map[i][j] = new BackgroundPiece(GameObject.Type.Grass);
 			}
 		}
 		
