@@ -29,6 +29,8 @@ public class Server
 	 */
 	private static final String BASE_URL = "http://droidelicious.com/rampart/";
 	
+	private static final String TIMER_URL = BASE_URL + "timer.php?";
+	
 	private static final String MODE_URL = BASE_URL + "mode.php?";
 	private static final String GAME_URL = BASE_URL + "game.php?";
 	
@@ -44,7 +46,7 @@ public class Server
 	
 	private static final String GAME_STATE_URL = BASE_URL + "game_state.php?";
 	
-	private double lastUpdate;
+	private float lastUpdate;
 	
 	private Server(){}
 	
@@ -58,15 +60,6 @@ public class Server
 		return SingletonHolder.INSTANCE;
 	}
 	
-	public void updateGameMode(GameState.Mode mode)
-	{
-		String sUrl = MODE_URL + "game_id=" + Player.getThisPlayer().getGameId() + 
-						"&mode=" + mode.toString();
-		
-		this.LogUrl(sUrl);
-		
-		this.getUrlData(sUrl);
-	}
 	
 	public int newGame()
 	{
@@ -79,6 +72,40 @@ public class Server
 		Player.getThisPlayer().setGameId(gameId);
 		
 		return gameId;
+	}
+	
+	public void startTimer()
+	{
+		String sUrl = TIMER_URL + "start=1";
+		this.LogUrl(sUrl);
+		
+		this.getUrlData(sUrl);
+	}
+	
+	public int getElapsedTime()
+	{
+		int elapsed = -1;
+		String sUrl = TIMER_URL + "get=1";
+		this.LogUrl(sUrl);
+		elapsed = Integer.parseInt(this.getUrlData(sUrl));
+		return elapsed;
+	}
+	
+	public void stopTimer()
+	{
+		String sUrl = TIMER_URL + "reset=1";
+		this.LogUrl(sUrl);
+		this.getUrlData(sUrl);
+	}
+	
+	public void setGameMode(GameState.Mode mode)
+	{
+		String sUrl = MODE_URL + "game_id=" + Player.getThisPlayer().getGameId() + 
+						"&mode=" + mode.toString();
+		
+		this.LogUrl(sUrl);
+		
+		this.getUrlData(sUrl);
 	}
 	
 	/**
@@ -180,7 +207,8 @@ public class Server
 	 */
 	public GameState getGameState()
 	{
-		String sUrl = GAME_STATE_URL + "game_id=" + Player.getThisPlayer().getGameId();
+		Player player = Player.getThisPlayer();
+		String sUrl = GAME_STATE_URL + "game_id=" + player.getGameId() + "&player_id=" + player.playerId + "&last_update=" + this.lastUpdate;
 		GameState gameState = new GameState();
 		
 		this.LogUrl(sUrl);
@@ -206,7 +234,8 @@ public class Server
 			walls = json.getJSONArray("walls");
 			cannons = json.getJSONArray("cannons");
 			
-			gameState.serverTime = Double.valueOf(serverTime);
+			gameState.elapsedTime = json.optInt("elapsedTime");
+			gameState.serverTime = this.lastUpdate = Float.valueOf(serverTime);
 			gameState.mode = GameState.Mode.valueOf(mode);
 			
 			int i;
