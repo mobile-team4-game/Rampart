@@ -33,6 +33,7 @@ public class Server
 	
 	private static final String MODE_URL = BASE_URL + "mode.php?";
 	private static final String GAME_URL = BASE_URL + "game.php?";
+	private static final String JOIN_URL = BASE_URL + "join.php?";
 	
 	private static final String FIRE_URL = BASE_URL + "shot.php?";
 	
@@ -60,17 +61,35 @@ public class Server
 		return SingletonHolder.INSTANCE;
 	}
 	
-	
 	public int newGame()
 	{
+		Player player = Player.getThisPlayer();
+		int gameId = joinGame();
+		
+		if(gameId == -1)
+		{
+			player.isGameCreator = true;
+			String sUrl = GAME_URL + "player_id=" + Player.getThisPlayer().playerId;
+			
+			this.LogUrl(sUrl);
+			
+			gameId = Integer.parseInt(this.getUrlData(sUrl));
+			Player.getThisPlayer().setGameId(gameId);
+		}
+		else
+		{
+			player.isGameCreator = false;
+		}
+		
+		return gameId;
+	}
+	
+	private int joinGame()
+	{
 		int gameId;
-		String sUrl = GAME_URL + "player_id=" + Player.getThisPlayer().playerId;
-		
+		String sUrl = JOIN_URL + "player_id=" + Player.getThisPlayer().playerId;
 		this.LogUrl(sUrl);
-		
 		gameId = Integer.parseInt(this.getUrlData(sUrl));
-		Player.getThisPlayer().setGameId(gameId);
-		
 		return gameId;
 	}
 	

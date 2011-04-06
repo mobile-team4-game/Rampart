@@ -6,6 +6,7 @@ public class Player
 {
 	String playerId;
 	private int inGame;
+	public boolean isGameCreator;
 	private static Player thisPlayer;
 	
 	public Player(String id)
