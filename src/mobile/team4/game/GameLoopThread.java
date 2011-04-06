@@ -1,6 +1,7 @@
 package mobile.team4.game;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameLoopThread extends Thread {

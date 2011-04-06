@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -54,7 +55,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 				background_list.add(bg);
 			}
 		}
-		
+	}
+	
+	public void init() {
 		wall = BitmapFactory.decodeResource(getResources(), R.drawable.wall);
 		castle = BitmapFactory.decodeResource(getResources(), R.drawable.castle);
 		cannonball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
@@ -137,7 +140,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		_thread.setRunning(true);
-        _thread.start();		
+		init();
+        _thread.start();	
 	}
 
 	@Override

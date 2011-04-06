@@ -2,6 +2,7 @@ package mobile.team4.game;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class Rampart extends Activity {
     /** Called when the activity is first created. */
