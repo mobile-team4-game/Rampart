@@ -214,8 +214,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onDown(MotionEvent e) {
-
-		return false;
+		return true;
 	}
 
 	@Override
@@ -246,7 +245,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
@@ -266,20 +265,20 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent e) {
-		Log.d("Rampart", "onSingleTapConfirmed.");
-		if(mode == Mode.CANNONS){  
-			if(cannonsToPlace > 0) {
-				int x = (int)(e.getX() / gridWidth);
-				int y = (int)(e.getY() / gridHeight);
-				if(x > 0 && x < MAP_WIDTH) {
-					if(y > 0 && y < MAP_HEIGHT) { 
-						Point pos = new Point(x, y);
-						map.insert_at(x, y, new Cannon(pos));
-						cannonsToPlace--;
+			Log.d("Rampart", "onSingleTapUp.");
+			if(mode == Mode.CANNONS){  
+				if(cannonsToPlace > 0) {
+					int x = (int)(e.getX() / gridWidth);
+					int y = (int)(e.getY() / gridHeight);
+					if(x > 0 && x < MAP_WIDTH) {
+						if(y > 0 && y < MAP_HEIGHT) { 
+							Point pos = new Point(x, y);
+							map.insert_at(x, y, new Cannon(pos));
+							cannonsToPlace--;
+						}
 					}
 				}
 			}
-		}	
 		return false;
 	}
 }
