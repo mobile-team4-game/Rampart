@@ -80,6 +80,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 			game_map.placeWall(position, shape);
 		}
 	}
+	
+	public void deleteFrom(Point position) {
+		
+	}
 
 	public void updateAnimations() {
 		// TODO Auto-generated method stub

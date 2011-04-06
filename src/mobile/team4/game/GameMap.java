@@ -2,7 +2,7 @@ package mobile.team4.game;
 
 
 public class GameMap {
-	private static int[][] map;
+	private static GameObject[][] map;
 	
 	public enum Pieces {
 		CannonTopLeft, CannonTopRight, CannonBottomLeft, CannonBottomRight, 
@@ -13,19 +13,19 @@ public class GameMap {
 	public void print_map() {
 		for (int row = 0; row < map.length; row++) {
 			for (int col = 0; col < map[row].length; col++) {
-		        System.out.print(Integer.toString(map[row][col]) + " ");
+		        System.out.print(map[row][col] + " ");
 			}
 			System.out.println();
 		}
 	}
 	
 	GameMap (int cols, int rows) {
-		map = new int[cols][rows];
+		map = new GameObject[cols][rows];
 		
 		// do i actually need to initialize to zero
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				map[i][j] = Pieces.Grass.ordinal();
+				map[i][j] = new BackgroundPiece(BackgroundPiece.Type.Grass);
 			}
 		}
 		
@@ -47,12 +47,17 @@ public class GameMap {
 	
 	public void placeWall(Point location, Shape shape) {
 		for (Point point : shape.points) {
-			insert_at(point.get_x() + location.get_y(), point.get_y() + location.get_y(), 1);
+			Point p = new Point(point.get_x() + location.get_x(), point.get_y() + location.get_y());
+			insert_at(p, new WallPiece(p));
 		}
 	}
 	
-	public void insert_at(int x, int y, int value) {
-		map[y][x] = value;
+	public void insert_at(Point position, GameObject object) {
+		map[position.get_y()][position.get_x()] = object;
+	}
+	
+	public void insert_at(int x, int y, GameObject object) {
+		map[y][x] = object;
 	}
 	
 	public int getWidth() {
@@ -63,7 +68,7 @@ public class GameMap {
 		return map[0].length;
 	}
 	
-	static public int get_at(int x, int y)
+	static public GameObject get_at(int x, int y)
 	{
 		return (map[x][y]);
 	}
