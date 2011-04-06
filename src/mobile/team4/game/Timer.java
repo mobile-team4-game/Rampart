@@ -5,7 +5,7 @@ public class Timer {
 		time = 0;
 	}
 	
-	public void start() {
+	public void start() {		// Also acts as a reset.
 		time = System.currentTimeMillis();
 	}
 	

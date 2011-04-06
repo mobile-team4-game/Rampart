@@ -2,7 +2,7 @@ package mobile.team4.game;
 
 import java.util.ArrayList;
 
-import mobile.team4.game.GameObject.Type;
+import mobile.team4.game.GameState.Mode;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -28,6 +28,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	ArrayList<Shot> shot_list;	//  For cannonballs.
 	GameMap game_map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
 	Bitmap wall, castle, cannonball, cannon, grass, water, floor;
+	Server server;
+	GameState state;
+	Mode mode;
+	Timer stateTimer;
 	
 	public Game(Context context) {
 		super(context);
@@ -36,6 +40,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
         
 		shot_list = new ArrayList<Shot>();
+		server = Server.getInstance();
+		//server.newGame();
+		mode = Mode.CANNONS;
+		stateTimer = new Timer();
+		stateTimer.start();
 	}
 	
 	public void init() {
@@ -80,10 +89,27 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		
 	}
 
-	public void updateState() {
-		// TODO Auto-generated method stub
-		
-		
+	public void updateState() {	
+		/*
+		if(stateTimer.getElapsedTime() > 200) {		// Calls 5 times per second.
+			state = server.getGameState();
+			mode = state.mode;
+			stateTimer.start();
+		}
+		for(int i = 0; i < state.cannons.size(); i++) {
+			Point p = state.cannons.get(i);
+			Cannon c = new Cannon(p);
+			map.insert_at(p, c);
+		}
+		for(int i = 0; i < state.walls.size(); i++) {
+			Point p = state.walls.get(i);
+			WallPiece w = new WallPiece(p);
+			map.insert_at(p, w);
+		}
+		for(int i = 0; i < state.shots.size(); i++) {
+			Shot s = state.shots.get(i);
+			shot_list.add(s);
+		} */
 	}
 	
 	public void updateVideo(Canvas c) {
