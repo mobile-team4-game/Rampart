@@ -35,6 +35,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	int numCannons;
 	
 	ArrayList<Shot> shot_list;	//  For cannonballs.
+	ArrayList<Cannon> cannon_list;
 	GameMap map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
 	Bitmap wall, castle, cannonball, cannon, grass, water, floor;
 	Server server;
@@ -50,6 +51,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
         setFocusable(true);
         
 		shot_list = new ArrayList<Shot>();
+		cannon_list = new ArrayList<Cannon>();
 		Player player = new Player();
 		server = Server.getInstance();
 		server.newGame();
@@ -171,6 +173,10 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 				}
 			}
 		}
+		for(int i = 0; i < shot_list.size(); i++) {
+			Point p = shot_list.get(i).getPosition();
+			c.drawBitmap(cannonball,p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+		}
 	}
 
 	@Override
@@ -250,8 +256,21 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	public boolean onSingleTapUp(MotionEvent e) {
 		Log.d("Rampart", "onSingleTapUp.");
 		if(mode == Mode.BATTLE) {
-			
-		}
+			int x = (int)(e.getX() / gridWidth);
+			int y = (int)(e.getY() / gridHeight);
+			if(x > 0 && x < MAP_WIDTH) {
+				if(y > 0 && y < MAP_HEIGHT) { 
+					for(int i = 0; i < cannon_list.size(); i++) {
+						if(!cannon_list.get(i).isFiring()) {
+							Log.d("Rampart", "Adding a shot.");
+							cannon_list.get(i).setFiring(true);
+							shot_list.add(new Shot(new Point(cannon_list.get(i).getPosition()), new Point(x, y)));
+							break;
+						}
+					}
+				}
+			}
+		} 
 		return false;
 	}
 
@@ -293,6 +312,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 								map.insert_at(x + 1, y, g);
 								map.insert_at(x, y + 1, g);
 								map.insert_at(x + 1, y + 1, g);
+								cannon_list.add(new Cannon(pos));
 								cannonsToPlace--;
 								numCannons++;
 								if(cannonsToPlace == 0)

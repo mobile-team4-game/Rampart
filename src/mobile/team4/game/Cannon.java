@@ -8,6 +8,7 @@ public class Cannon extends GameObject {
 	public Cannon(Point pos) {
 		position = pos;
 		type = Type.Cannon;
+		isFiring = false;
 	}
 
 	public Boolean isFiring() {
@@ -24,5 +25,9 @@ public class Cannon extends GameObject {
 	
 	public void fire(Point target) {
 		
+	}
+	
+	public void setFiring(boolean t) {
+		isFiring = t;
 	}
 }
