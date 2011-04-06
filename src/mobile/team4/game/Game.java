@@ -9,10 +9,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class Game extends SurfaceView implements SurfaceHolder.Callback {
+public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestureListener {
 	
 	GameLoopThread _thread;
 	Boolean isRunning;
@@ -32,6 +35,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	GameState state;
 	Mode mode;
 	Timer stateTimer, frameTimer;
+	GestureDetector gd;
 	
 	public Game(Context context) {
 		super(context);
@@ -49,6 +53,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		frameTimer = new Timer();
 		stateTimer.start();
 		frameTimer.start();
+		gd = new GestureDetector(this);
 	}
 	
 	public void init() {
@@ -127,8 +132,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 				map.insert_at(s.target, new BackgroundPiece(GameObject.Type.Grass));
 				shot_list.remove(i);
 			} else {
-				shot_list.get(i).x = dMoved * (pos.get_x() - s.x);
-				shot_list.get(i).y = dMoved * (pos.get_y() - s.y);
+				shot_list.get(i).x += dMoved * (pos.get_x() - s.x);
+				shot_list.get(i).y += dMoved * (pos.get_y() - s.y);
 			}
 		}
 	}
@@ -191,5 +196,48 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		matrix.postScale(widthScale, heightScale);
 		Bitmap resizedbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
 		return resizedbm;
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent e) {
+		return gd.onTouchEvent(e);
+	}
+
+	@Override
+	public boolean onDown(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
