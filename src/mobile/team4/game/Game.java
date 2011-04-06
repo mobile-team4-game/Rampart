@@ -24,6 +24,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	static int MAP_WIDTH = 10;
 	static int MAP_HEIGHT = 10;
 	int gridHeight, gridWidth;
+	int cannonsToPlace;
 	
 	ArrayList<Shot> shot_list;	//  For cannonballs.
 	GameMap game_map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
@@ -59,6 +60,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		gridHeight = getHeight() / MAP_HEIGHT;
 		gridWidth = gridHeight;
 		
+		grass = resizeBitmap(grass, gridHeight, gridWidth);
 		wall = resizeBitmap(wall, gridHeight, gridWidth);
 		castle = resizeBitmap(castle, 2 * gridHeight, 2 * gridWidth);
 		cannon = resizeBitmap(cannon, 2 * gridHeight, 2 * gridWidth);
