@@ -21,6 +21,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	
 	static int MAP_WIDTH = 30;
 	static int MAP_HEIGHT = 20;
+	static int MAX_VELOCITY = 10;
 	int gridHeight, gridWidth;
 	int cannonsToPlace;
 	
@@ -30,7 +31,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	Server server;
 	GameState state;
 	Mode mode;
-	Timer stateTimer;
+	Timer stateTimer, frameTimer;
 	
 	public Game(Context context) {
 		super(context);
@@ -45,7 +46,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 		mode = Mode.CANNONS;
 		
 		stateTimer = new Timer();
+		frameTimer = new Timer();
 		stateTimer.start();
+		frameTimer.start();
 	}
 	
 	public void init() {
@@ -112,6 +115,22 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 			Shot s = state.shots.get(i);
 			shot_list.add(s);
 		} */
+		long elapsedTime = frameTimer.getElapsedTime();
+		frameTimer.start();
+		for(int i = 0; i < shot_list.size(); i++) {
+			Shot s = shot_list.get(i);
+			Point pos = s.getPosition();
+			double distance = Math.sqrt(((pos.get_x() - s.x) * (pos.get_x() - s.x)) + 
+					((pos.get_y() - s.y) * (pos.get_y() - s.y)));
+			double dMoved = MAX_VELOCITY / elapsedTime;
+			if(dMoved > distance) {
+				map.insert_at(s.target, new BackgroundPiece(GameObject.Type.Grass));
+				shot_list.remove(i);
+			} else {
+				shot_list.get(i).x = dMoved * (pos.get_x() - s.x);
+				shot_list.get(i).y = dMoved * (pos.get_y() - s.y);
+			}
+		}
 	}
 	
 	public void updateVideo(Canvas c) {
