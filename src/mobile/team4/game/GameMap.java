@@ -1,5 +1,7 @@
 package mobile.team4.game;
 
+import mobile.team4.game.GameObject.Type;
+
 public class GameMap {
 	private static GameObject[][] map;
 	
@@ -47,6 +49,12 @@ public class GameMap {
 	
 	public void placeWall(Point location, Shape shape) {
 		for (Point point : shape.points) {
+			if (get_at(point).getType() != Type.Grass) {
+				break;
+			}
+		}
+		
+		for (Point point : shape.points) {
 			Point p = new Point(point.get_x() + location.get_x(), point.get_y() + location.get_y());
 			insert_at(p, new WallPiece(p));
 		}
@@ -75,6 +83,10 @@ public class GameMap {
 		return (map[y][x]);
 	}
 	
+	public GameObject get_at(Point p)
+	{
+		return (map[p.get_y()][p.get_x()]);
+	}
 
 }
 
