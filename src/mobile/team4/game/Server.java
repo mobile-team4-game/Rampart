@@ -90,7 +90,16 @@ public class Server
 		int gameId;
 		String sUrl = JOIN_URL + "player_id=" + Player.getThisPlayer().playerId;
 		this.LogUrl(sUrl);
-		gameId = Integer.parseInt(this.getUrlData(sUrl));
+		
+		try
+		{
+			gameId = Integer.parseInt(this.getUrlData(sUrl));
+		}
+		catch(Exception e)
+		{
+			return -1;
+		}
+		
 		return gameId;
 	}
 	
