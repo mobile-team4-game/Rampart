@@ -60,14 +60,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		frameTimer.start();
 		gd = new GestureDetector(this);
 		gd.setOnDoubleTapListener(this);
-		this.setOnTouchListener(new View.OnTouchListener() {
-	        @Override
-	        public boolean onTouch(View v, MotionEvent event) {
-	            Log.i("RAMPART", "Touch coordinates : " +
-	                String.valueOf(event.getX()) + "x" + String.valueOf(event.getY()));
-	                return true;
-	        }
-	    });
 	}
 	
 	public void init() {
