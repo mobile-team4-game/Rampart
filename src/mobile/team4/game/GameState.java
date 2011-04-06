@@ -15,7 +15,7 @@ public class GameState
 {
 	public int elapsedTime;
 	public static enum Mode {REBUILD, CANNONS, BATTLE, PAUSED};
-	public float serverTime;
+	public double serverTime;
 	public Mode mode;
 	public Vector<Shot> shots = new Vector<Shot>();
 	public Vector<Point> walls = new Vector<Point>();

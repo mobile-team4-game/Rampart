@@ -48,7 +48,7 @@ public class Server
 	
 	private static final String GAME_STATE_URL = BASE_URL + "game_state.php?";
 	
-	private float lastUpdate;
+	private double lastUpdate;
 	
 	private Server(){}
 	
@@ -278,7 +278,7 @@ public class Server
 			cannons = json.getJSONArray("cannons");
 			
 			gameState.elapsedTime = json.optInt("elapsedTime");
-			gameState.serverTime = this.lastUpdate = Float.valueOf(serverTime);
+			gameState.serverTime = this.lastUpdate = Double.valueOf(serverTime);
 			gameState.mode = GameState.Mode.valueOf(mode);
 			
 			int i;
