@@ -26,8 +26,7 @@ public class GameMap {
 		// do i actually need to initialize to zero
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				map[j][i] = new BackgroundPiece(GameObject.Type.Grass);
-				map[j][i].setPosition(i, j);
+				map[j][i] = new BackgroundPiece(GameObject.Type.Grass, new Point(i, j));
 			}
 		}
 		
@@ -70,7 +69,7 @@ public class GameMap {
 	}
 	
 	public void insert_at(int x, int y, GameObject object) {
-		object.setPosition(x, y);
+		//object.setPosition(x, y);
 		map[y][x] = object;
 	}
 	
