@@ -18,14 +18,14 @@ public class GameMap {
 		}
 	}
 	
-	GameMap (int cols, int rows) {
+	GameMap (int rows, int cols) {
 		map = new GameObject[cols][rows];
 		
 		// do i actually need to initialize to zero
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
-				map[i][j] = new BackgroundPiece(GameObject.Type.Grass);
-				map[i][j].setPosition(i, j);
+				map[j][i] = new BackgroundPiece(GameObject.Type.Grass);
+				map[j][i].setPosition(i, j);
 			}
 		}
 		

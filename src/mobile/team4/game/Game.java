@@ -13,21 +13,19 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
-
-	GameMap map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
 	
 	GameLoopThread _thread;
 	Boolean isRunning;
 	Boolean isPaused;
 	float deltaTime;
 	
-	static int MAP_WIDTH = 10;
-	static int MAP_HEIGHT = 10;
+	static int MAP_WIDTH = 30;
+	static int MAP_HEIGHT = 20;
 	int gridHeight, gridWidth;
 	int cannonsToPlace;
 	
 	ArrayList<Shot> shot_list;	//  For cannonballs.
-	GameMap game_map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
+	GameMap map = new GameMap(MAP_WIDTH, MAP_HEIGHT);
 	Bitmap wall, castle, cannonball, cannon, grass, water, floor;
 	Server server;
 	GameState state;
@@ -68,7 +66,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void placeWall(Point position, Shape shape) {
 		for (Point point : shape.points) {
-			game_map.placeWall(position, shape);
+			map.placeWall(position, shape);
 		}
 	}
 	
