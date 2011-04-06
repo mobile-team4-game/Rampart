@@ -3,14 +3,12 @@ package mobile.team4.game;
 import java.util.ArrayList;
 
 import mobile.team4.game.GameObject.Type;
-import mobile.team4.game.GameMap.Pieces;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -41,10 +39,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         _thread = new GameLoopThread(getHolder(), this);
         setFocusable(true);
         
-		cannon_list = new ArrayList<Cannon>();
-		wall_list = new ArrayList<WallPiece>();
-		background_list = new ArrayList<BackgroundPiece>();
-		castle_list = new ArrayList<Castle>();
 		shot_list = new ArrayList<Shot>();
 		
 		for (int i = 0; i < MAP_WIDTH; i++) {
@@ -107,31 +101,25 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	
 	public void updateVideo(Canvas c) {
-		for(int i = 0; i < background_list.size(); i++) {
-			Point p = background_list.get(i).getPosition();
-			if(background_list.get(i).getType() == Type.Floor) {
-				c.drawBitmap(floor, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-			} else if(background_list.get(i).getType() == Type.Grass) {
-				c.drawBitmap(grass, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-			} else if(background_list.get(i).getType() == Type.Water){
-				c.drawBitmap(water, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+		for(int i = 0; i < MAP_WIDTH; i++) {
+			for(int j = 0; j < MAP_HEIGHT; i++) {
+				GameObject toDraw = map.get_at(i, j);
+				Point p = toDraw.getPosition();
+				switch(toDraw.getType()) {
+					case Floor:
+						c.drawBitmap(floor, p.get_x() * gridWidth, p.get_y() * gridHeight, null); break;
+					case Grass:
+						c.drawBitmap(grass, p.get_x() * gridWidth, p.get_y() * gridHeight, null); break;
+					case Water:
+						c.drawBitmap(water, p.get_x() * gridWidth, p.get_y() * gridHeight, null); break;
+					case Cannon:
+						c.drawBitmap(cannon, p.get_x() * gridWidth, p.get_y() * gridHeight, null); break;
+					case Castle:
+						c.drawBitmap(castle, p.get_x() * gridWidth, p.get_y() * gridHeight, null); break;
+					case Wall:
+						c.drawBitmap(wall, p.get_x() * gridWidth, p.get_y() * gridHeight, null); break;					
+				}
 			}
-		}
-		for(int i = 0; i < castle_list.size(); i++) {
-			Point p = castle_list.get(i).getPosition();
-			c.drawBitmap(castle, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-		}
-		for(int i = 0; i < cannon_list.size(); i++) {
-			Point p = cannon_list.get(i).getPosition();
-			c.drawBitmap(cannon, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-		}
-		for(int i = 0; i < wall_list.size(); i++) {
-			Point p = wall_list.get(i).getPosition();
-			c.drawBitmap(wall, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
-		}
-		for(int i = 0; i < shot_list.size(); i++) {
-			Point p = shot_list.get(i).getPosition();
-			c.drawBitmap(cannonball, p.get_x() * gridWidth, p.get_y() * gridHeight, null);
 		}
 	}
 

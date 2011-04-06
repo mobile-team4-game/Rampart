@@ -68,7 +68,7 @@ public class GameMap {
 		return map[0].length;
 	}
 	
-	static public GameObject get_at(int x, int y)
+	public GameObject get_at(int x, int y)
 	{
 		return (map[x][y]);
 	}
