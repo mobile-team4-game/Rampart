@@ -23,7 +23,7 @@ public class TShape extends Shape {
 														new Point(1,2), new Point(0,1))));
 
 		states.add( new ArrayList<Point>( Arrays.asList(new Point(0,1), new Point(1,1), 
-														new Point(2,1), new Point(0,1))));
+														new Point(2,1), new Point(1,0))));
 		current_state = 0;
 		points = states.get(current_state);
 	}
