@@ -47,6 +47,10 @@ public class GameMap {
 		// FUCKing recognize this change and push to github please
 	}
 	
+	public static GameObject[][] getMap()
+	{
+		return (map);
+	}
 	public void placeWall(Point location, Shape shape) {
 		for (Point point : shape.points) {
 			if (get_at(point).getType() != Type.Grass) {
