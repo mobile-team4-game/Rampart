@@ -74,8 +74,15 @@ public class Server
 			
 			this.LogUrl(sUrl);
 			
-			gameId = Integer.parseInt(this.getUrlData(sUrl));
-			Player.getThisPlayer().setGameId(gameId);
+			try
+			{
+				gameId = Integer.parseInt(this.getUrlData(sUrl));
+				Player.getThisPlayer().setGameId(gameId);
+			}
+			catch(Exception e)
+			{
+				Player.getThisPlayer().setGameId(-1);
+			}
 		}
 		else
 		{
