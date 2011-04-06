@@ -29,7 +29,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 	
 	static int MAP_WIDTH = 30;
 	static int MAP_HEIGHT = 20;
-	static int MAX_VELOCITY = 10;
+	static int MAX_VELOCITY = 1;
 	int gridHeight, gridWidth;
 	int cannonsToPlace;
 	int numCannons;
@@ -85,6 +85,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		wall = resizeBitmap(wall, gridHeight, gridWidth);
 		castle = resizeBitmap(castle, 2 * gridHeight, 2 * gridWidth);
 		cannon = resizeBitmap(cannon, 2 * gridHeight, 2 * gridWidth);
+		cannonball = resizeBitmap(cannonball, (int)(.5 * gridHeight), (int)(.5 * gridWidth));
 	}
 	
 	public void placeWall(Point position, Shape shape) {
@@ -140,12 +141,20 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 		frameTimer.start();
 		for(int i = 0; i < shot_list.size(); i++) {
 			Shot s = shot_list.get(i);
-			Point pos = s.getPosition();
+			Point pos = s.getTarget();
 			double distance = Math.sqrt(((pos.get_x() - s.x) * (pos.get_x() - s.x)) + 
 					((pos.get_y() - s.y) * (pos.get_y() - s.y)));
-			double dMoved = MAX_VELOCITY / elapsedTime;
+			double dMoved = MAX_VELOCITY *(elapsedTime / 1000.0f);
 			if(dMoved > distance) {
 				map.insert_at(s.target, new BackgroundPiece(GameObject.Type.Grass, s.target));
+				/*for(int j = 0; j < cannon_list.size(); i++)  {
+					Cannon c = cannon_list.get(j);
+					Point p = c.getPosition();
+					if(p.get_x() == s.getPosition().get_x()
+						&& p.get_y() == s.getPosition().get_y()) {
+						c.setFiring(false);
+					} 
+				} */
 				shot_list.remove(i);
 			} else {
 				shot_list.get(i).x += dMoved * (pos.get_x() - s.x);
@@ -176,8 +185,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 			}
 		}
 		for(int i = 0; i < shot_list.size(); i++) {
-			Point p = shot_list.get(i).getPosition();
-			c.drawBitmap(cannonball,p.get_x() * gridWidth, p.get_y() * gridHeight, null);
+			double x = shot_list.get(i).x;
+			double y = shot_list.get(i).y;
+			c.drawBitmap(cannonball, (float)x * gridWidth, (float)y * gridHeight, null);
 		}
 		for (Point point : toPlace.points) {
 			Point p = new Point(point.get_x() + toPlace.getPosition().get_x(), point.get_y() + toPlace.getPosition().get_y());
@@ -339,7 +349,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback, OnGestu
 								cannonsToPlace--;
 								numCannons++;
 								if(cannonsToPlace == 0) {
-									mode = Mode.REBUILD;
+									mode = Mode.BATTLE;
 									return false;
 								}
 							}

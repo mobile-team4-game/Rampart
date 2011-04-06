@@ -8,5 +8,11 @@ public class Shot extends GameObject {
 	public Shot(Point pos, Point tar) {
 		position = pos;
 		target = tar;
+		x = position.get_x();
+		y = position.get_y();
+	}
+	
+	public Point getTarget() {
+		return target;
 	}
 }
