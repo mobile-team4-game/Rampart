@@ -41,9 +41,11 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
         
 		shot_list = new ArrayList<Shot>();
+		Player player = new Player();
 		server = Server.getInstance();
 		//server.newGame();
 		mode = Mode.CANNONS;
+		
 		stateTimer = new Timer();
 		stateTimer.start();
 	}
