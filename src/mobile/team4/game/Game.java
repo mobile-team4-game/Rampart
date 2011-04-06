@@ -127,8 +127,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 				map.insert_at(s.target, new BackgroundPiece(GameObject.Type.Grass));
 				shot_list.remove(i);
 			} else {
-				shot_list.get(i).x = dMoved * (pos.get_x() - s.x);
-				shot_list.get(i).y = dMoved * (pos.get_y() - s.y);
+				shot_list.get(i).x += dMoved * (pos.get_x() - s.x);
+				shot_list.get(i).y += dMoved * (pos.get_y() - s.y);
 			}
 		}
 	}
